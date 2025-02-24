@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Applications</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .application-details {
+            max-width: 500px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+
+          
+ }
+        h2 {
+            text-align: center;
+        }
+        p {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Submitted Applications</h2>
+    <div class="application-details" id="applications"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const supabaseUrl = "https://jreotsvatctmizlrmogb.supabase.co"; // Replace with your Supabase URL
+        const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpyZW90c3ZhdGN0bWl6bHJtb2diIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAzOTkwNzIsImV4cCI6MjA1NTk3NTA3Mn0.6uPFFv5Hm0jl483VeERoS4IN9XrGYBMhDbz8Iinp-jo"; // Replace with your Supabase Public API Key
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+     
+async function loadApplications() {
+            const { data, error } = await supabase
+                .from("members")
+                .select("*");
+
+            if (!error) {
+                const applicationsDiv = document.getElementById("applications");
+                applicationsDiv.innerHTML = data.map(app => `
+                    <p><strong>Name:</strong> ${app.name}</p>
+                    <p><strong>Date of Birth:</strong> ${app.dob}</p>
+                    <p><strong>Sex:</strong> ${app.sex}</p>
+                    <p><strong>Interest:</strong> ${app.interest}</p>
+                    <hr>
+                `).join("");
+            } else {
+                alert("Error loading applications: " + error.message);
+            }
+        }
+
+        loadApplications();
+    </script>
+</body>
+</html>
